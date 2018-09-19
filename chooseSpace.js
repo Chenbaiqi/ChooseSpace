@@ -1,11 +1,11 @@
 //功能:选择空间
-//用法示例:<choose-space @choose="chooseSpaceValue"></choose-space>
+//用法示例:<choose-space v-model='value'></choose-space>
 //cyn
 
 const chooseSpace =  {
     template:   `<Cascader :data="spaceData" 
                            :load-data="loadElevation" 
-                           v-model="value"
+                           :value="currentValue"
                            placeholder="选择空间" 
                            :change-on-select="changeOnSelect"
                            @on-change="choose"
@@ -14,12 +14,15 @@ const chooseSpace =  {
      	changeOnSelect: {
             type: Boolean,
             default: true
+        },
+        value: {
+     	    type: Array
         }
     },
     data () {
         return {
             spaceData: [],
-            value: []
+            currentValue: this.value
         }
     },
     methods: {
@@ -82,11 +85,15 @@ const chooseSpace =  {
             });
         },
         choose (val) {
-            console.log(val);
-            this.$emit('choose',val)
+            this.$emit('input',val);
         }
     },
     mounted () {
-        this.loadUnitProject()
+        this.loadUnitProject();
+    },
+    watch: {
+        value (val) {
+            this.currentValue = val
+        }
     }
 };
